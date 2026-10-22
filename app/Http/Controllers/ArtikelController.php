@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Artikel;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreArtikelRequest;
+use App\Http\Requests\UpdateArtikelRequest;
 
 class ArtikelController extends Controller
 {
@@ -27,9 +29,11 @@ class ArtikelController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    
+    
+    public function store(StoreArtikelRequest $request)
     {
-         Artikel::create([
+        Artikel::create([
             'user_id' => auth()->id() ?? 1,
             'judul' => $request->judul,
             'slug' => \Illuminate\Support\Str::slug($request->judul),
@@ -59,9 +63,10 @@ class ArtikelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Artikel $artikel)
+    
+    public function update(UpdateArtikelRequest $request, Artikel $artikel)
     {
-         $artikel->update([
+        $artikel->update([
             'judul' => $request->judul,
             'slug' => \Illuminate\Support\Str::slug($request->judul),
             'isi' => $request->isi,
@@ -70,6 +75,7 @@ class ArtikelController extends Controller
 
         return redirect()->route('artikel.index')->with('pesan', 'Artikel berhasil diperbarui');
     }
+
 
     /**
      * Remove the specified resource from storage.
