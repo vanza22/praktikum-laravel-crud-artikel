@@ -23,23 +23,21 @@ class ArtikelController extends Controller
      */
     public function create()
     {
+        \Log::info('METHOD ARTIKEL CREATE TERPANGGIL');
         return view('artikel.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    
-    
     public function store(StoreArtikelRequest $request)
     {
-        Artikel::create([
-            'user_id' => auth()->id() ?? 1,
-            'judul' => $request->judul,
-            'slug' => \Illuminate\Support\Str::slug($request->judul),
-            'isi' => $request->isi,
-            'status' => $request->status,
-        ]);
+        $data = $request->validated();
+
+        $data['slug'] = \Illuminate\Support\Str::slug($data['judul']);
+        $data['user_id'] = auth()->id();
+
+        Artikel::create($data);
 
         return redirect()->route('artikel.index')->with('pesan', 'Artikel berhasil ditambahkan');
     }
