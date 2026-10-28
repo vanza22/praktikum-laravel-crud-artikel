@@ -64,16 +64,15 @@ class ArtikelController extends Controller
     
     public function update(UpdateArtikelRequest $request, Artikel $artikel)
     {
-        $artikel->update([
-            'judul' => $request->judul,
-            'slug' => \Illuminate\Support\Str::slug($request->judul),
-            'isi' => $request->isi,
-            'status' => $request->status,
-        ]);
+        $data = $request->validated();
 
-        return redirect()->route('artikel.index')->with('pesan', 'Artikel berhasil diperbarui');
+        $data['slug'] = \Illuminate\Support\Str::slug($data['judul']);
+
+        $artikel->update($data);
+
+        return redirect()->route('artikel.index')
+            ->with('pesan', 'Artikel berhasil diperbarui');
     }
-
 
     /**
      * Remove the specified resource from storage.
